@@ -2,6 +2,7 @@
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "start": "nodemon app.js"
