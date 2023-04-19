@@ -21,11 +21,7 @@ Connection(username, password);
 
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({
-  origin: ['https://thedigitalworkstation.netlify.app/'],
-  methods: ['GET', 'POST'],
-  credentials: true,
-}));
+app.use(cors());
 app.use(cookieParser());
 
 app.use(session({
