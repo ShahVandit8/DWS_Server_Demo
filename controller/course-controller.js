@@ -83,7 +83,7 @@ export const getITCourseList = async (request, response) => {
 
 export const getMultimediaCourseList = async (request, response) => {
     try {
-        const courselist = await Courses.find({ Category: 'Multimedia' }).sort({ Title: 1 })
+        const courselist = await Courses.find({ Category: 'Multimedia', Status: 'Active' }).sort({ Title: 1 })
         response.status(200).json(courselist);
     } catch (err) {
         response.status(404).json({ message: err.message })
@@ -93,6 +93,16 @@ export const getMultimediaCourseList = async (request, response) => {
 export const getCourseById = async (request, response) => {
     try {
         const Onecourse = await Courses.findOne({ _id: request.params.id })
+        response.status(200).json(Onecourse);
+    } catch (err) {
+        response.status(404).json({ message: err.message })
+    }
+}
+
+export const getCourseByIdList = async (request, response) => {
+    try {
+        const { array } = request.body
+        const Onecourse = await Courses.find({ _id: { "$in" : array } })
         response.status(200).json(Onecourse);
     } catch (err) {
         response.status(404).json({ message: err.message })

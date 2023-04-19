@@ -70,7 +70,7 @@ export const LoginAdmin = async (request, response) => {
             // return res.json({status: 'ok', userlogin: token })
         }
         else {
-            return response.status(400).json({ message: 'Wrong Credentials' })
+            return response.status(201).json({ status: 'NA', message: 'Wrong Credentials' })
         }
 
     }

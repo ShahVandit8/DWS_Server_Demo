@@ -22,7 +22,7 @@ Connection(username, password);
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['https://thedigitalworkstation.netlify.app/'],
   methods: ['GET', 'POST'],
   credentials: true,
 }));

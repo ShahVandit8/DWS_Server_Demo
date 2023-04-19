@@ -3,7 +3,7 @@ import multer from "multer"
 
 import { registerUser, loginUser, editBasicDetailsUser, editPhotoUser, editAccountSecurity, getUsers, getUserById, getStudent, getStudentListForCourse, getAllStudentListForCourse, editWholeUser, getStudentMultipleCourses, ForgotPasswordAPI } from "../controller/user-controller.js";
 import { LoginAdmin, getAdminById, editAdmin, editAdminPassword } from "../controller/admin-controller.js";
-import { addCourse, getCourseList, getITCourseList, getCourseById, getCourseListByInstructorId, getActiveCourse, getInactiveCourse, getCourseCount, editCourseDetails, editCourseByModuleStatus, editCourseInstructor, getMultimediaCourseList, changeCourseStatus } from "../controller/course-controller.js";
+import { addCourse, getCourseList, getITCourseList, getCourseById, getCourseListByInstructorId, getActiveCourse, getInactiveCourse, getCourseCount, editCourseDetails, editCourseByModuleStatus, editCourseInstructor, getMultimediaCourseList, changeCourseStatus, getCourseByIdList } from "../controller/course-controller.js";
 import { LoginInstructor, addInstructor, getInstructorList, getInstructorById, editInstructor, editInstructorProfile, getInstructorCount, addCourseInInstructor, editInstructorPassword, editInstructorStatus} from "../controller/instructor-controller.js";
 import { makeEnrollment, getEnrollments, getActiveEnrollments, getEnrollmentsByMultipleCourse, getRecentEnrollments, getRevenue, getRevenueCourseWise, markEnrollmentAsPassedout, markEnrollmentAsTerminated, markEnrollmentAsActive, getEnrollmentsByCourseId } from "../controller/enrollment-controller.js";
 import { addAttendance, getAttendanceByDate, editAttendance, getAttendanceListByDate, getAttendanceByStudentId } from "../controller/attendance-controller.js";
@@ -57,6 +57,7 @@ router.post('/updatepass/:id' , editAdminPassword);
 
 router.post('/addcourse',upload.single("CoverImage"), addCourse);
 router.get('/coursedetail/:id', getCourseById);
+router.post('/courses-detail', getCourseByIdList);
 router.get('/allcourses', getCourseList);
 router.get('/courses-instructor/:id', getCourseListByInstructorId);
 router.get('/it-courses', getITCourseList);
