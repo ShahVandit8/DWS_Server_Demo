@@ -1,6 +1,8 @@
 import Instructor from '../schema/instructor-schema.js';
 import courses from '../schema/course-schema.js';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
 export const addInstructor = async (request, response) => {
 
@@ -336,6 +338,72 @@ export const editInstructorStatus = async (request, response) => {
         }
         else {
             response.status(409).json({ message: 'Instructor not updated' });
+        }
+
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+
+export const ForgotPasswordINSAPI = async (request, response) => {
+    try {
+        const Email = request.params.id;
+        const useralready = await Instructor.find({ Email: Email })
+        dotenv.config();
+        if (useralready.length) {
+
+            const date = new Date();
+            let time = date.getTime();
+
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAILJS_USERNAME,
+                    pass: process.env.EMAILJS_PASSWORD
+                }
+            });
+
+            const options = {
+                // from : "78degreescafe@gmail.com",
+                from: "thedigitalworkstation@gmail.com",
+                to: Email,
+                subject: "Forgot Password - Recovery",
+                text: `Your Change Password Link is ${process.env.FRONT_END_URL}/change-password/instructor/${time}/${useralready[0]._id} Note : This link is only valid for 5 minutes.`
+            }
+
+            transporter.sendMail(options, (err, info) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+            })
+            response.status(200).json({ message: "The email is sent" });
+
+        }
+        else {
+            response.status(404).json({ message: "This email is not valid" });
+        }
+    } catch (err) {
+        response.status(404).json({ message: err.message })
+    }
+}
+
+
+export const changePasswordINS = async (request, response) => {
+
+    try {
+        const { newpass } = request.body;
+
+        const userdets = await Instructor.updateOne({ _id: request.params.id }, { Password: newpass })
+
+        if (userdets) {
+
+            return response.status(200).json({ status: 'ok', message: 'Password Change Successfully' });
+        }
+        else {
+            response.status(201).json({ status: 'NA', message: 'Error while changing password' });
         }
 
     }

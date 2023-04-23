@@ -1,10 +1,10 @@
 import express  from "express";
 import multer from "multer"
 
-import { registerUser, loginUser, editBasicDetailsUser, editPhotoUser, editAccountSecurity, getUsers, getUserById, getStudent, getStudentListForCourse, getAllStudentListForCourse, editWholeUser, getStudentMultipleCourses, ForgotPasswordAPI } from "../controller/user-controller.js";
+import { registerUser, loginUser, editBasicDetailsUser, editPhotoUser, editAccountSecurity, getUsers, getUserById, getStudent, getStudentListForCourse, getAllStudentListForCourse, editWholeUser, getStudentMultipleCourses, ForgotPasswordAPI, changePassword } from "../controller/user-controller.js";
 import { LoginAdmin, getAdminById, editAdmin, editAdminPassword } from "../controller/admin-controller.js";
 import { addCourse, getCourseList, getITCourseList, getCourseById, getCourseListByInstructorId, getActiveCourse, getInactiveCourse, getCourseCount, editCourseDetails, editCourseByModuleStatus, editCourseInstructor, getMultimediaCourseList, changeCourseStatus, getCourseByIdList } from "../controller/course-controller.js";
-import { LoginInstructor, addInstructor, getInstructorList, getInstructorById, editInstructor, editInstructorProfile, getInstructorCount, addCourseInInstructor, editInstructorPassword, editInstructorStatus} from "../controller/instructor-controller.js";
+import { LoginInstructor, addInstructor, getInstructorList, getInstructorById, editInstructor, editInstructorProfile, getInstructorCount, addCourseInInstructor, editInstructorPassword, editInstructorStatus, ForgotPasswordINSAPI, changePasswordINS} from "../controller/instructor-controller.js";
 import { makeEnrollment, getEnrollments, getActiveEnrollments, getEnrollmentsByMultipleCourse, getRecentEnrollments, getRevenue, getRevenueCourseWise, markEnrollmentAsPassedout, markEnrollmentAsTerminated, markEnrollmentAsActive, getEnrollmentsByCourseId } from "../controller/enrollment-controller.js";
 import { addAttendance, getAttendanceByDate, editAttendance, getAttendanceListByDate, getAttendanceByStudentId } from "../controller/attendance-controller.js";
 import { addFile, getFilesByCourse, deleteFile, getFiles, getFilesByMultiCourse } from "../controller/resourses-controller.js";
@@ -40,6 +40,7 @@ router.post('/edituserbasicdetails/:id', editBasicDetailsUser);
 router.post('/editwholeuser/:id', upload.single("ProfilePicture"), editWholeUser);
 router.post('/edituserphoto/:id', upload.single("ProfilePicture"), editPhotoUser);
 router.post('/edituserpassword/:id', editAccountSecurity);
+router.post('/changePassword/:id', changePassword);
 router.get('/allusers', getUsers);
 router.get('/userdetails/:id', getUserById);
 router.get('/all-student', getStudent);
@@ -77,6 +78,7 @@ router.get('/allinstructors', getInstructorList);
 router.get('/instructor/:id', getInstructorById);
 router.post('/editinstructor/:id',upload.single("ProfilePhoto"), editInstructor);
 router.post('/editinstructor/profile/:id',upload.single("ProfilePhoto"), editInstructorProfile);
+router.post('/changePasswordINS/:id', changePasswordINS);
 router.get('/instructorcount', getInstructorCount);
 router.post('/editinstructorcourse/:id', addCourseInInstructor);
 router.post('/update-instructor-pass/:id' , editInstructorPassword);
@@ -117,6 +119,7 @@ router.get('/delete-message/:id', deleteMessage)
 router.post('/check-message', checkMessageByEmail)
 
 router.get('/forget-password/:id', ForgotPasswordAPI)
+router.get('/forget-password-instructor/:id', ForgotPasswordINSAPI)
 
 
 export default router;

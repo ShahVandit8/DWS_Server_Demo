@@ -165,7 +165,7 @@ export const editPhotoUser = async (request, response) => {
         // const edituserphoto = new users({ ProfilePicture })
 
         try {
-            const UserEdited = await users.updateOne({ _id: request.params.id }, {ProfilePicture} );
+            const UserEdited = await users.updateOne({ _id: request.params.id }, { ProfilePicture });
 
             if (UserEdited) {
                 const userdetails = await users.findOne({ _id: request.params.id })
@@ -431,14 +431,17 @@ export const getAllStudentListForCourse = async (request, response) => {
 
 
 export const ForgotPasswordAPI = async (request, response) => {
-    try{
+    try {
         const Email = request.params.id;
         const useralready = await users.find({ Email: Email })
         dotenv.config();
-        if(useralready.length){
+        if (useralready.length) {
+
+            const date = new Date();
+            let time = date.getTime();
 
             const transporter = nodemailer.createTransport({
-                service : 'gmail',
+                service: 'gmail',
                 auth: {
                     user: process.env.EMAILJS_USERNAME,
                     pass: process.env.EMAILJS_PASSWORD
@@ -447,25 +450,48 @@ export const ForgotPasswordAPI = async (request, response) => {
 
             const options = {
                 // from : "78degreescafe@gmail.com",
-                from : "thedigitalworkstation@gmail.com",
-                to : Email, 
-                subject : "Forgot Password - Recovery",
-                text : `Your Password is ${useralready.map(item => (item.Password))}`
+                from: "thedigitalworkstation@gmail.com",
+                to: Email,
+                subject: "Forgot Password - Recovery",
+                text: `Your Change Password Link is ${process.env.FRONT_END_URL}/change-password/${time}/${useralready[0]._id} Note : This link is only valid for 5 minutes.`
             }
 
-            transporter.sendMail(options, (err,info) => {
-                if(err) {
+            transporter.sendMail(options, (err, info) => {
+                if (err) {
                     console.log(err);
                     return;
                 }
             })
-            response.status(200).json({ message: "The email is sent"}); 
+            response.status(200).json({ message: "The email is sent" });
 
         }
-        else{
-            response.status(404).json({ message: "This email is not valid"}); 
+        else {
+            response.status(404).json({ message: "This email is not valid" });
         }
     } catch (err) {
         response.status(404).json({ message: err.message })
+    }
+}
+
+
+
+export const changePassword = async (request, response) => {
+
+    try {
+        const { newpass } = request.body;
+
+        const userdets = await users.updateOne({ _id: request.params.id }, { Password: newpass })
+
+        if (userdets) {
+
+            return response.status(200).json({ status: 'ok', message: 'Password Change Successfully' });
+        }
+        else {
+            response.status(201).json({ status: 'NA', message: 'Error while changing password' });
+        }
+
+    }
+    catch (err) {
+        console.error(err);
     }
 }
